@@ -4,6 +4,8 @@
 
 **在线试玩**：<https://iphsiibl.github.io/after15/>
 
+**作者**：Iphsiibl · <https://github.com/Iphsiibl/after15>（网页右上角的 GitHub 图标、页面底部署名和结算卡片角标都指向这里）
+
 零依赖、零账号、零网络请求：**单文件 HTML**，双击即跑，离线可用。所有插画是内联 SVG，所有环境音（雨 / 风 / 室内）和提示音由 Web Audio 实时合成。
 
 ---
@@ -23,6 +25,8 @@
 | 顶部那条长条 | 不是音量条，是「剩余电量」。选不同选项会加减（-3 ~ +6），做小动作 +1，做完两轮呼吸 +4。 |
 | 最终电量 | 决定你拿到哪个结局（< 40 / < 78 / ≥ 78），也决定结算卡上的数字。 |
 | 右上角喇叭 | 声音开关（静音 / 取消静音）。 |
+| 右上角 GitHub 图标 | 作者的仓库地址（`github.com/Iphsiibl/after15`），点开是新标签页。 |
+| 页面底部那行小字 | 作者署名，点仓库地址可以看源码。 |
 | 「今日份废话」 | 你今晚总共说了多少字。 |
 
 ### 无障碍与操作
@@ -71,6 +75,8 @@ python tools/compose_music.py
 
 推 `main` 分支即由 GitHub Actions 自动重新打包并发布到 GitHub Pages（见 `.github/workflows/pages.yml`）。
 想走最省事的分支发布路线：Settings → Pages → Source 选 `main` / `docs`。
+
+首次部署的完整分步教程（含建仓库、PAT、常见坑）见仓库里的 [`发布指南.md`](发布指南.md)。
 
 ## License
 
