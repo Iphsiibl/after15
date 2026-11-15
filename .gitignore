@@ -1,0 +1,18 @@
+# 依赖与缓存
+node_modules/
+__pycache__/
+*.pyc
+
+# 临时脚本与中间产物
+tools/_*
+dist/shots/
+dist/shots-mobile/
+*.wav
+*.log
+
+# 本地版本留档（体积大，不进仓库；本机 project/versions 里保留）
+versions/
+
+# 系统文件
+.DS_Store
+Thumbs.db

@@ -1,0 +1,51 @@
+name: Deploy to GitHub Pages
+
+# 推 main 分支就自动重新打包并发布
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同时只允许一个发布任务在跑
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 打包单文件网页
+        run: python tools/build.py --title "下班后的十五分钟"
+
+      - name: 准备站点目录
+        run: |
+          mkdir -p _site
+          cp dist/index.html _site/index.html
+          cp dist/after15.mp3 _site/after15.mp3
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 发布
+        id: deployment
+        uses: actions/deploy-pages@v4
