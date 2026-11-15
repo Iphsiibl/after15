@@ -4,8 +4,6 @@
 
 **在线试玩**：<https://iphsiibl.github.io/after15/>
 
-**作者**：Iphsiibl · <https://github.com/Iphsiibl/after15>（网页右上角的 GitHub 图标、页面底部署名和结算卡片角标都指向这里）
-
 零依赖、零账号、零网络请求：**单文件 HTML**，双击即跑，离线可用。所有插画是内联 SVG，所有环境音（雨 / 风 / 室内）和提示音由 Web Audio 实时合成。
 
 ---
