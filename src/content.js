@@ -510,6 +510,13 @@
     '现在，请把手机扣过去。',
   ];
 
+  // 作者与仓库标识（全站唯一出处：页头图标、页脚署名、结算卡片角标都读这里）
+  const AUTHOR = {
+    name: 'Iphsiibl',
+    repo: 'https://github.com/Iphsiibl/after15',
+    short: 'github.com/Iphsiibl/after15',
+  };
+
   const TIPS = [
     '今天的废话，明天再说也行。',
     '你今天的「下班」，是从谁手里抢回来的？',
@@ -518,5 +525,5 @@
     '下班这件事，不需要谁来批准。',
   ];
 
-  global.CONTENT = { SCENES, STAGES, DAILY_SIGNS, ENDINGS, TOMORROW, TIPS, SCENE_ALT };
+  global.CONTENT = { SCENES, STAGES, DAILY_SIGNS, ENDINGS, TOMORROW, TIPS, SCENE_ALT, AUTHOR };
 })(window);

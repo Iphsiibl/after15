@@ -152,6 +152,26 @@ module.exports = async function scenario(page, shots, report) {
   });
   steps.push({ at: 'result', ...result });
 
+  // --- 回归: GitHub 署名要在页脚, 链接指向作者仓库 ---
+  const ghResult = await page.evaluate(() => {
+    const line = document.querySelector('.screen.result .gh-line');
+    const a = line ? line.querySelector('a') : null;
+    const icon = document.querySelector('#gh-top');
+    return {
+      hasLine: !!line,
+      text: line ? line.textContent.replace(/\s+/g, ' ').trim() : null,
+      href: a ? a.getAttribute('href') : null,
+      target: a ? a.getAttribute('target') : null,
+      rel: a ? a.getAttribute('rel') : null,
+      topbarHref: icon ? icon.getAttribute('href') : null,
+      topbarLabel: icon ? icon.getAttribute('aria-label') : null,
+    };
+  });
+  steps.push({ at: 'gh-signature-result', ...ghResult });
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await wait(300);
+  await shot('06c-result-foot.png');
+
   // --- 回归 3: 结算页应该从头开始看 ---
   const scrollAtResult = await page.evaluate(() => window.scrollY);
   steps.push({ at: 'result-scroll', scrollY: scrollAtResult });
@@ -214,6 +234,21 @@ module.exports = async function scenario(page, shots, report) {
   }));
   steps.push({ at: 'revisit', ...revisit });
   await shot('07-revisit.png');
+
+  // --- 回归: 大厅页脚也有署名 ---
+  const ghLobby = await page.evaluate(() => {
+    const line = document.querySelector('.screen.lobby .gh-line');
+    const a = line ? line.querySelector('a') : null;
+    return {
+      hasLine: !!line,
+      text: line ? line.textContent.replace(/\s+/g, ' ').trim() : null,
+      href: a ? a.getAttribute('href') : null,
+    };
+  });
+  steps.push({ at: 'gh-signature-lobby', ...ghLobby });
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await wait(300);
+  await shot('08-lobby-foot.png');
 
   // --- 回归 6: 重新走第一站, 点"跳过打字"之后选项必须出现(否则流程会卡死) ---
   await page.click('#btn-start');

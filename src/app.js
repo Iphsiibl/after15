@@ -81,6 +81,18 @@
   function esc(s) {
     return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
+  /* ---------------- 作者标识（GitHub） ---------------- */
+  const GH_ICON =
+    '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+    '<path d="M12 .8a11.2 11.2 0 0 0-3.55 21.92c.56.1.77-.24.77-.54v-2.1c-3.12.68-3.78-1.3-3.78-1.3-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.68.08-.68 1.13.08 1.72 1.16 1.72 1.16 1 1.72 2.6 1.22 3.23.94.1-.73.39-1.22.71-1.5-2.49-.28-5.1-1.25-5.1-5.56 0-1.23.44-2.23 1.16-3.02-.12-.29-.5-1.43.11-2.98 0 0 .94-.3 3.1 1.15a10.7 10.7 0 0 1 5.64 0c2.15-1.45 3.1-1.15 3.1-1.15.61 1.55.23 2.69.11 2.98.72.79 1.15 1.79 1.15 3.02 0 4.32-2.62 5.27-5.12 5.55.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.78.54A11.2 11.2 0 0 0 12 .8Z"/></svg>';
+  // 页面署名：GitHub 图标 + 账号名 + 仓库地址
+  function ghLine() {
+    const a = C.AUTHOR || { name: 'Iphsiibl', repo: 'https://github.com/Iphsiibl/after15' };
+    return `<p class="gh-line">${GH_ICON}` +
+      `<span>作者 ${esc(a.name)}</span>` +
+      `<a href="${esc(a.repo)}" target="_blank" rel="noopener noreferrer">${esc(a.repo.replace(/^https?:\/\//, ''))}</a>` +
+      `</p>`;
+  }
   function setScreen(name) {
     document.body.dataset.screen = name;
   }
@@ -212,6 +224,7 @@
             <button class="ghost small" id="btn-take">收下了</button>
           </div>` : ''}
           {{MUSIC}}
+          ${ghLine()}
         </div>
         <div class="lobby-art-wrap" role="img" aria-label="${esc(C.SCENE_ALT.dusk)}">${C.SCENES.dusk}</div>
         </div>
@@ -682,6 +695,7 @@
         </div>
         {{MUSIC}}
         <p class="micro">今天没有解决任何问题，但你把自己带回来了。这也算数。</p>
+        ${ghLine()}
       </section>`;
 
     drawCard();
@@ -716,6 +730,7 @@
         '废话：' + state.waste + ' 字 · 仪式：' + state.acts + ' 次 · 电量：' + Math.round(state.battery) + '%',
         '今日一签：' + sign,
         '——' + endingFor(state.battery).lines.join(''),
+        '作者 ' + ((C.AUTHOR && C.AUTHOR.name) || 'Iphsiibl') + ' · ' + ((C.AUTHOR && C.AUTHOR.repo) || 'https://github.com/Iphsiibl/after15'),
       ].join('\n');
       try {
         await navigator.clipboard.writeText(txt);
@@ -851,7 +866,10 @@
     ctx.textAlign = 'right';
     ctx.fillStyle = 'rgba(255,255,255,.35)';
     ctx.font = '20px ' + font;
-    ctx.fillText('下班后的十五分钟', W - PAD, H - 56);
+    ctx.fillText('下班后的十五分钟 · ' + ((C.AUTHOR && C.AUTHOR.name) || 'Iphsiibl'), W - PAD, H - 62);
+    ctx.fillStyle = 'rgba(255,255,255,.28)';
+    ctx.font = '17px ' + font;
+    ctx.fillText((C.AUTHOR && C.AUTHOR.short) || 'github.com/Iphsiibl/after15', W - PAD, H - 30);
     ctx.textAlign = 'left';
   }
   function roundRect(ctx, x, y, w, h, r) {
@@ -928,6 +946,12 @@
   function boot() {
     state.sign = C.DAILY_SIGNS[hashDay(dateKey()) % C.DAILY_SIGNS.length];
     state.tip = C.TIPS[hashDay(dateKey() + 'tip') % C.TIPS.length];
+    // 顶栏的 GitHub 图标: 用 content.js 里的作者信息做唯一出处
+    const gh = document.getElementById('gh-top');
+    if (gh && C.AUTHOR && C.AUTHOR.repo) {
+      gh.setAttribute('href', C.AUTHOR.repo);
+      gh.setAttribute('aria-label', '作者 ' + C.AUTHOR.name + ' 的 GitHub 仓库：' + C.AUTHOR.repo.replace(/^https?:\/\//, ''));
+    }
     renderLobby();
     initSound();
     initKeys();
